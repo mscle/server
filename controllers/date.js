@@ -47,4 +47,4 @@ exports.expire = function(date, hours)
 exports.intervalHours = function(timestamp)
 {
     return timestamp / 1000 / 60 / 60;
-}
+};

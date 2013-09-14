@@ -1,6 +1,8 @@
 var Vow = require('vow');
 exports.Vow = Vow;
 
+exports.Promise = Vow.promise;
+
 exports.call = function ()
 {
     var promise = Vow.promise();

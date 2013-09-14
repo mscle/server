@@ -3,7 +3,7 @@ var Vow = require('vow');
 var P = require('../p');
 
 var collections = [
-    'factors', 'awards', 'exercises', 'gyms', 'muscles', 'muscles_view', 'players', 'work', 'bank'
+    'exercises', 'gyms', 'muscles', 'muscles_view', 'players'
 ];
 
 function recreateColl(name)

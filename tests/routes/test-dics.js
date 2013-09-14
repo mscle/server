@@ -14,7 +14,6 @@ exports.get = function(test)
             test.equal(dics != undefined, true);
             if (dics != undefined)
             {
-                test.equal(dics.awards != undefined, true);
                 test.equal(dics.muscles != undefined, true);
                 test.equal(dics.muscles.length, 16);
             }

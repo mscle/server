@@ -69,10 +69,10 @@ exports.completeSuccess = function(test)
         },
         console.log
     ).then(
-        function(answer)
+        function(money)
         {
             test.equal(session.player.jobbing.started, false);
-            test.equal(answer.money != undefined, true);
+            test.equal(money != undefined, true);
             test.done();
         },
         console.log

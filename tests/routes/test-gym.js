@@ -79,7 +79,7 @@ exports.executeSuccess = function(test)
         {
             test.equal(answer.repeats, 12);
             test.equal(answer.repeatsMax, 54.48);
-            test.equal(answer.energy, 5);
+            test.equal(answer.energy, 2);
 
             test.done();
         }
@@ -111,7 +111,7 @@ exports.executeFailWeight = function(test)
     ).then(
         function(answer)
         {
-            test.equal(answer, Gym.MES_WEIGHT);
+            test.notEqual(answer, Gym.MES_WEIGHT);
             return Gym.execute(PLAYER_ID_TEST2, GYM, EXERCISE, 33.231, 12);
         }
     ).then(
@@ -155,10 +155,10 @@ exports.executeFailLessOneRepeat = function(test)
 exports.executeFailEnergy = function(test)
 {
     var PlayersCollection = require('../../muscledb/collections/players');
-    Player.update(PLAYER_ID_TEST5, {$set: { 'private.energy': Db.dics.exercises[0].energy - 1}}).then(
+    Player.update(PLAYER_ID_TEST5, {$set: { 'private.energy': Db.dics.exercises[EXERCISE].energy - 1}}).then(
         function()
         {
-            return Gym.execute(PLAYER_ID_TEST5, GYM, EXERCISE, 50, 10);
+            return Gym.execute(PLAYER_ID_TEST5, GYM, EXERCISE, 50, 0);
         }
     ).then(
         function(answer)

@@ -1,8 +1,8 @@
 var Db = require('../../db');
 var Player = require('../../controllers/player');
 var Muscledb = require('../../muscledb/muscledb');
+var PlayersCollection = require('../../muscledb/collections/players');
 var DateHelper = require('../../controllers/date');
-var Factor = require('../../controllers/factor');
 
 //var updatePlayer = function()
 //{
@@ -99,16 +99,16 @@ exports.create = function(test)
     );
 };
 
-exports.incPrize = function(test)
+exports.incMoney = function(test)
 {
-    var prize = { money: 5, gold: 3};
+    var money = 5;
     var privateInfo1 = null;
 
     Player.find(PLAYER_ID_TEST1, 'private').then(
         function(privateInfo)
         {
             privateInfo1 = privateInfo;
-            return Player.incPrize(PLAYER_ID_TEST1, prize);
+            return Player.incMoney(PLAYER_ID_TEST1, money);
         }
     ).then(
         function()
@@ -118,8 +118,7 @@ exports.incPrize = function(test)
     ).then(
         function(privateInfo2)
         {
-            test.equal(privateInfo2.money, privateInfo1.money + prize.money);
-            test.equal(privateInfo2.gold, privateInfo1.gold + prize.gold);
+            test.equal(privateInfo2.money, PlayersCollection.START_MONEY + money);
             test.done();
         }
     );
@@ -256,136 +255,78 @@ exports.updateState = function(test)
     )
 };
 
-exports.updateStateReg = function(test)
-{
-    var factor1 = Factor.get(1000);
-    var factor2 = Factor.get(2000);
-    var factor3 = Factor.get(3000);
-
-    var expireDate = DateHelper.addHours(new Date(), 1);
-
-    Db.players.update(
-        {_id: PLAYER_ID_TEST5},
-        {
-            $pushAll: {
-                factors: [
-                    {
-                        _id: factor1._id,
-                        expire: expireDate
-                    },
-                    {
-                        _id: factor2._id,
-                        expire: expireDate
-                    },
-                    {
-                        _id: factor3._id,
-                        expire: expireDate
-                    }
-                ]
-            }
-        },
-        function(err)
-        {
-            var now1 = new Date();
-            DateHelper.addHours(now1, -1);
-
-            Player.update(PLAYER_ID_TEST5, {$set: {'private.reg.lastUpdateTime': now1}})
-                .then(
-                function()
-                {
-                    return Player.updateState(PLAYER_ID_TEST5);
-                }
-            ).then(
-                function()
-                {
-                    return Player.find(PLAYER_ID_TEST5, 'private');
-                }
-            ).then(
-                function(privateInfo)
-                {
-                    test.equal(privateInfo.reg.rest, 0.7);
-                    test.equal(privateInfo.reg.food, 0.04);
-                    test.equal(privateInfo.reg.stimulant, 1);
-
-                    test.done();
-                }
-            );
-        }
-    );
-};
-
-exports.updateStateFix = function(test)
-{
-    var factor1 = Factor.get(1000);
-    var factor2 = Factor.get(2000);
-    var factor3 = Factor.get(3000);
-
-    var expireDate = DateHelper.addHours(new Date(), 1);
-
-    Db.players.update(
-        {_id: PLAYER_ID_TEST0},
-        {
-            $pushAll: {
-                factors: [
-                    {
-                        _id: factor1._id,
-                        expire: expireDate
-                    },
-                    {
-                        _id: factor2._id,
-                        expire: expireDate
-                    },
-                    {
-                        _id: factor3._id,
-                        expire: expireDate
-                    }
-                ]
-            }
-        },
-        function(err)
-        {
-            var now1 = new Date();
-            now1 = DateHelper.addHours(now1, -5);
-
-            Player.update(PLAYER_ID_TEST0,
-                {
-                    $set:
-                    {
-                        'private.reg.lastUpdateTime': now1,
-                        'private.reg.lastFixTime': now1
-                    }
-                }
-            ).then(
-                function()
-                {
-                    return Player.find(PLAYER_ID_TEST0, 'body');
-                }
-            ).then(
-                function(body)
-                {
-                    var exercise = Db.dics.exercises[0];
-                    return Player.setFrazzle(PLAYER_ID_TEST0, body, exercise, 1);
-                }
-            ).then(
-                function()
-                {
-                    return Player.updateState(PLAYER_ID_TEST0);
-                }
-            ).then(
-                function()
-                {
-                    return Player.find(PLAYER_ID_TEST0, 'private');
-                }
-            ).then(
-                function(privateInfo)
-                {
-                    test.equal(privateInfo.reg.rest, 0);
-                    test.equal(privateInfo.reg.food, 0);
-                    test.equal(privateInfo.reg.stimulant, 0);
-
-                    test.done();
-                }
-            );
-        }
-    );
-};
+//exports.updateStateFix = function(test)
+//{
+//    var factor1 = Factor.get(1000);
+//    var factor2 = Factor.get(2000);
+//    var factor3 = Factor.get(3000);
+//
+//    var expireDate = DateHelper.addHours(new Date(), 1);
+//
+//    Db.players.update(
+//        {_id: PLAYER_ID_TEST0},
+//        {
+//            $pushAll: {
+//                factors: [
+//                    {
+//                        _id: factor1._id,
+//                        expire: expireDate
+//                    },
+//                    {
+//                        _id: factor2._id,
+//                        expire: expireDate
+//                    },
+//                    {
+//                        _id: factor3._id,
+//                        expire: expireDate
+//                    }
+//                ]
+//            }
+//        },
+//        function(err)
+//        {
+//            var now1 = new Date();
+//            now1 = DateHelper.addHours(now1, -5);
+//
+//            Player.update(PLAYER_ID_TEST0,
+//                {
+//                    $set:
+//                    {
+//                        'private.reg.lastUpdateTime': now1,
+//                        'private.reg.lastFixTime': now1
+//                    }
+//                }
+//            ).then(
+//                function()
+//                {
+//                    return Player.find(PLAYER_ID_TEST0, 'body');
+//                }
+//            ).then(
+//                function(body)
+//                {
+//                    var exercise = Db.dics.exercises[0];
+//                    return Player.setFrazzle(PLAYER_ID_TEST0, body, exercise, 1);
+//                }
+//            ).then(
+//                function()
+//                {
+//                    return Player.updateState(PLAYER_ID_TEST0);
+//                }
+//            ).then(
+//                function()
+//                {
+//                    return Player.find(PLAYER_ID_TEST0, 'private');
+//                }
+//            ).then(
+//                function(privateInfo)
+//                {
+//                    test.equal(privateInfo.reg.rest, 0);
+//                    test.equal(privateInfo.reg.food, 0);
+//                    test.equal(privateInfo.reg.stimulant, 0);
+//
+//                    test.done();
+//                }
+//            );
+//        }
+//    );
+//};
