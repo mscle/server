@@ -1,7 +1,6 @@
 var Db = require('../db');
 var Base = require('./base');
 var Player = require('../controllers/player');
-var Factor = require('../controllers/factor');
 var Dics = require('./dics');
 var Gym = require('./gym');
 var Jobbing = require('./jobbing');
@@ -17,6 +16,7 @@ function handler(req, res)
     var successHandler = function(answer)
     {
         if (answer == undefined)answer = true;
+        console.log(answer);
         res.jsonp(answer);
     };
 
@@ -83,14 +83,6 @@ function handler(req, res)
                 }, errorHandler);
             break;
 
-        case '/awards':
-            Player.updateState(id).then(
-                function()
-                {
-                    Player.find(id, 'awards').then(successHandler, errorHandler);
-                }, errorHandler);
-            break;
-
         case '/body':
             Player.updateState(id).then(
                 function()
@@ -99,28 +91,9 @@ function handler(req, res)
                 }, errorHandler);
             break;
 
-        case '/factors':
-            if (method == 'get')
-            {
-                Player.updateState(id).then(
-                    function()
-                    {
-                        Player.find(id, 'factors').then(successHandler, errorHandler);
-                    }, errorHandler);
-            }
-            else if (method == 'buy')
-            {
-                Player.updateState(id).then(
-                    function()
-                    {
-                        var factorId = param('factorId', 'int');
-                        Factor.buy(id, factorId).then(successHandler, errorHandler);
-                    }, errorHandler);
-            }
-            break;
-
         case '/jobbing':
             if (method == 'get')Jobbing.get(session).then(successHandler, errorHandler);
+            else if (method == 'start')Jobbing.start(session).then(successHandler, errorHandler);
             else if (method == 'complete')Jobbing.complete(session).then(successHandler, errorHandler);
             else errorHandler(ERR_METHOD);
             break;
@@ -135,6 +108,13 @@ function handler(req, res)
                 Gym.execute(id, gymId, exerciseId, weight, repeats).then(successHandler, errorHandler);
             }
             else errorHandler(ERR_METHOD);
+            break;
+
+        case '/top':
+            if (method == 'get')
+            {
+                Player.getTopPlayers().then(successHandler, errorHandler);
+            }
             break;
 
         default:

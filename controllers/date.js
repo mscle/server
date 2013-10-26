@@ -37,10 +37,11 @@ exports.addHoursClone = function(date, hours)
     return newDate;
 };
 
-exports.expire = function(date, hours)
+exports.setNextTime = function(date, hours)
 {
     var newDate = new Date(date);
-    newDate.setHours(newDate.getHours() + hours);
+    //newDate.setHours(newDate.getHours() + hours);
+    newDate.setMinutes(newDate.getMinutes() + hours);
     return newDate;
 };
 

@@ -77,6 +77,17 @@ exports.find = function(test)
     );
 };
 
+exports.getTopPlayers = function(test)
+{
+    Player.getTopPlayers().then(
+        function(data)
+        {
+            test.equal(data != null, true);
+            test.done();
+        }
+    );
+};
+
 exports.create = function(test)
 {
     Player.find(PLAYER_ID_NOT_EXISTS, 'public').then(

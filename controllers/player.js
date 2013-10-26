@@ -8,6 +8,7 @@ exports.REG_ENERGY = 0.3;
 exports.REG_ENERGY_PER_HOUR = exports.REG_ENERGY * PlayersCollection.ENERGY_MAX;
 var UPDATE_PERIOD = 5;
 var CHECK_LEVELUP_PERIOD = 4;
+var LIMIT_TOP_PLAYERS = 5;
 
 var update = function (id, setClause) {
     return P.call(function (fulfill, reject, handler) {
@@ -45,6 +46,19 @@ var find = function (id, shown) {
                     fulfill(data[shownBase]);
                 else fulfill(data);
             }
+        });
+    });
+};
+
+var getTopPlayers = function () {
+    return P.call(function (fulfill, reject) {
+        Db.players.find({$query: {}, $orderby: { 'public.level': -1 }}, { _id: 1 })
+            .limit(LIMIT_TOP_PLAYERS)
+            .toArray(function (err, data) {
+                if (err)reject(err);
+                else {
+                    fulfill(data);
+                }
         });
     });
 };
@@ -100,6 +114,7 @@ exports.remove = remove;
 exports.update = update;
 exports.create = create;
 exports.find = find;
+exports.getTopPlayers = getTopPlayers;
 exports.setFrazzle = setFrazzle;
 exports.updateState = updateState;
 

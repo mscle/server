@@ -83,7 +83,9 @@ exports.execute = function(playerId, gymId, exerciseId, weight, repeats)
                 var k1 = 1 - weight / power;
                 var repeatsMax = round2(k1 / 0.03 + k1 * k1 * 35 + 1);
                 var k2 = weight * repeatsMax - weight * repeatsMax * (k1 + 0.25) + weight;
+                while(k2 < 0) k2 += weight;
                 var effMax = k2 / (mass * 15);
+
 
                 var repeatsPlan = repeats > 0 ? repeats : repeatsMax;
                 var repeatsFact = round2(repeatsPlan < repeatsMax ? repeatsPlan : repeatsMax);

@@ -124,6 +124,24 @@ exports.find = function(collName)
     });
 };
 
+exports.ensureIndex = function(collName, index)
+{
+    return P.call(function(fulfill, reject, handler)
+    {
+        if (index == undefined)
+        {
+            fulfill();
+            return;
+        }
+        exports.collection(collName).then(
+            function(coll)
+            {
+                coll.ensureIndex(index,(handler));
+            }, reject
+        );
+    });
+};
+
 exports.remove = function(collName)
 {
     return P.call(function(fulfill, reject, handler)

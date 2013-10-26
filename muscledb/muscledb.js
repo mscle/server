@@ -6,6 +6,10 @@ var collections = [
     'exercises', 'gyms', 'muscles', 'muscles_view', 'players'
 ];
 
+var index = {
+    'players' : { 'public.level' : -1 }
+};
+
 function recreateColl(name)
 {
     return P.call(function(fulfill, reject)
@@ -60,7 +64,9 @@ function createColl(name)
     return P.call(function(fulfill, reject)
     {
         var values = require('./collections/' + name)[name];
-        Db.insert(name, values).then(fulfill, reject);
+        Db.insert(name, values)
+            .then(function(){ return Db.ensureIndex(name, index[name])}, reject)
+            .then(fulfill, reject);
     });
 }
 

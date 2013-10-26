@@ -1,12 +1,12 @@
 exports.ENERGY_MAX = 100;
 exports.START_MONEY = 125;
 
-exports.newPlayer = function(id)
+exports.newPlayer = function(id, level)
 {
     return {
         _id: id,
         jobbing: {
-            expire: new Date()
+            nextTime: new Date()
         },
         private: {
             money: exports.START_MONEY,
@@ -18,8 +18,7 @@ exports.newPlayer = function(id)
             }
         },
         public: {
-            //place: 0,
-            level: 120
+            level: level
         },
         body: [
             {
@@ -106,12 +105,12 @@ exports.newPlayer = function(id)
     };
 };
 
-var player0 = exports.newPlayer(0);
-var player1 = exports.newPlayer(1);
-var player2 = exports.newPlayer(2);
-var player3 = exports.newPlayer(3);
-var player4 = exports.newPlayer(4);
-var player5 = exports.newPlayer(5);
+var player0 = exports.newPlayer(0, 120);
+var player1 = exports.newPlayer(1, 2);
+var player2 = exports.newPlayer(2, 6);
+var player3 = exports.newPlayer(3, 3);
+var player4 = exports.newPlayer(4, 7);
+var player5 = exports.newPlayer(5, 10);
 
 exports.players = [
     player0, player1, player2, player3, player4, player5
