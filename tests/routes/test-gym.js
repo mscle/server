@@ -42,14 +42,14 @@ exports.getExercisePower = function(test)
 
 exports.executeSuccessForce = function(test)
 {
-    Gym.execute(PLAYER_ID_TEST1, GYM, EXERCISE, 90, 0).then(
+    Gym.execute(PLAYER_ID_TEST0, GYM, EXERCISE, 90, 0).then(
         function(answer)
         {
             test.equal(answer.repeats, 34.39);
             test.equal(answer.repeatsMax, 34.39);
             test.equal(answer.energy, 5);
 
-            return Gym.execute(PLAYER_ID_TEST1, GYM, EXERCISE, 90, 0);
+            return Gym.execute(PLAYER_ID_TEST0, GYM, EXERCISE, 90, 0);
         }
     ).then(
         function(answer)
@@ -58,7 +58,7 @@ exports.executeSuccessForce = function(test)
             test.equal(answer.repeatsMax, 34.02);
             test.equal(answer.energy, 5);
 
-            return Gym.execute(PLAYER_ID_TEST1, GYM, EXERCISE, 90, 0);
+            return Gym.execute(PLAYER_ID_TEST0, GYM, EXERCISE, 90, 0);
         }
     ).then(
         function(answer)
@@ -74,7 +74,7 @@ exports.executeSuccessForce = function(test)
 
 exports.executeSuccess = function(test)
 {
-    Gym.execute(PLAYER_ID_TEST2, GYM, EXERCISE, 35, 12).then(
+    Gym.execute(PLAYER_ID_TEST0, GYM, EXERCISE, 35, 12).then(
         function(answer)
         {
             test.equal(answer.repeats, 12);
@@ -88,7 +88,7 @@ exports.executeSuccess = function(test)
 
 exports.executeWarmup = function(test)
 {
-    Gym.execute(PLAYER_ID_TEST2, GYM, EXERCISE, 100, 1).then(
+    Gym.execute(PLAYER_ID_TEST0, GYM, EXERCISE, 100, 1).then(
         function(answer)
         {
             test.equal(answer.repeats, 1);
@@ -155,27 +155,27 @@ exports.executeFailLessOneRepeat = function(test)
 exports.executeFailEnergy = function(test)
 {
     var PlayersCollection = require('../../muscledb/collections/players');
-    Player.update(PLAYER_ID_TEST5, {$set: { 'private.energy': Db.dics.exercises[EXERCISE].energy - 1}}).then(
+    Player.update(PLAYER_ID_TEST0, {$set: { 'private.energy': Db.dics.exercises[EXERCISE].energy - 1}}).then(
         function()
         {
-            return Gym.execute(PLAYER_ID_TEST5, GYM, EXERCISE, 50, 0);
+            return Gym.execute(PLAYER_ID_TEST0, GYM, EXERCISE, 50, 0);
         }
     ).then(
         function(answer)
         {
             test.equal(answer, Gym.MES_ENERGY);
-            return Player.update(PLAYER_ID_TEST5, {$set: { 'private.energy': 1}});
+            return Player.update(PLAYER_ID_TEST0, {$set: { 'private.energy': 1}});
         }
     ).then(
         function()
         {
-            return Gym.execute(PLAYER_ID_TEST5, 2, EXERCISE, 160, 10);
+            return Gym.execute(PLAYER_ID_TEST0, 2, EXERCISE, 160, 10);
         }
     ).then(
         function(answer)
         {
             test.equal(answer, Gym.MES_ENERGY);
-            return Player.update(PLAYER_ID_TEST5, {$set: { 'private.energy': PlayersCollection.ENERGY_MAX}});
+            return Player.update(PLAYER_ID_TEST0, {$set: { 'private.energy': PlayersCollection.ENERGY_MAX}});
         }
     ).then(
         function()
